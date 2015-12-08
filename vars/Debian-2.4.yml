@@ -1,0 +1,4 @@
+apache_conf_d_dir: "/etc/apache2/conf-enabled"
+apache_modules_dir: "/etc/apache2/mods-enabled"
+apache_vhosts_conf_dir: "/etc/apache2/sites-enabled"
+

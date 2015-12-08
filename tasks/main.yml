@@ -1,0 +1,88 @@
+---
+# tasks file for apache2
+- name: Load the OS specific variables
+  tags: 
+    - apache
+    - php
+    - vhosts
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Install the apache packages in Redhat derivates
+  tags: apache
+  yum: name={{ item }} state=present
+  with_items: apache_pkgs
+  when: ansible_os_family == 'RedHat'
+
+- name: Install the apache packages in Debian derivates
+  tags: apache
+  apt: name={{ item }} state=present update_cache=yes cache_valid_time=600
+  with_items: apache_pkgs
+  environment:
+    # prevent mysql from autostart after installation
+    RUNLEVEL: 1
+  when: ansible_os_family == 'Debian'
+
+- name: Get apache version
+  tags: 
+    - apache
+    - php
+    - vhosts
+  always_run: true
+  changed_when: false
+  shell: '{{ apache_service | quote }} -v | grep version | sed -e "s/Server version.\{1\} Apache\/\([0-9]\)\.\([0-9]\)\.\([0-9]\{1,3\}\).*/\1.\2/g"'
+  register: apache_version
+
+- name: Load aditional variables
+  tags: 
+    - apache
+    - php
+    - vhosts
+  include_vars: "{{ ansible_os_family }}-{{ apache_version.stdout }}.yml"
+
+- name: Load security hardening for apache
+  tags: apache
+  copy: src={{ item }} dest={{ apache_conf_d_dir }} owner=root group=root mode=0644
+  with_fileglob:
+    - conf.d/*
+  notify: reload apache
+
+- name: Remove old security hardening
+  tags: apache
+  file: path={{ apache_conf_d_dir }}/{{ item }} state=absent
+  with_items:
+    - etag
+    - security
+  notify: reload apache
+
+- name: Load apache configuration
+  tags: apache
+  template: src=apache2.conf.{{ ansible_os_family }}-{{ apache_version.stdout }}.j2 dest={{ apache_conf_dir }}/{{ apache_config_file }} owner=root group=root mode=0644
+  notify: reload apache
+
+- name: Load ports configuration (Listen directive)
+  tags: apache
+  template: src=ports.conf.j2 dest={{ apache_conf_dir }}/ports.conf owner=root group=root mode=0644
+  notify: restart apache
+  when: ansible_os_family == 'Debian'
+
+- name: Enable aditional apache modules if needed
+  tags: apache
+  command: /usr/sbin/a2enmod {{ item }} creates=/etc/apache2/mods-enabled/{{ item + '.load' }}
+  with_items: apache_modules
+  when: 
+    - ansible_os_family == 'Debian'
+    - apache_modules is defined
+  notify: reload apache
+
+- name: Ensure vhosts.d directory is defined (RedHat)
+  tags: 
+    - apache
+    - php
+    - vhosts
+  file: path={{ apache_vhosts_conf_dir }} state=directory owner=root group=root mode=0750
+  when: ansible_os_family == 'RedHat'
+
+- name: Ensure apache is running and autostart
+  tags: apache
+  service: name={{ apache_service }} state=started enabled=yes
+

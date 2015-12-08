@@ -1,0 +1,10 @@
+apache_service: "apache2"
+
+apache_conf_dir: "/etc/apache2"
+
+apache_owner: "www-data"
+apache_group: "www-data"
+
+apache_pkgs:
+  - apache2
+

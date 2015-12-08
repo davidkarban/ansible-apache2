@@ -1,0 +1,18 @@
+---
+# defaults file for apache2
+apache_ip: "{{ ansible_default_ipv4.address }}"
+apache_ssl_ip: "{{ ansible_default_ipv4.address }}"
+
+apache_port: 80
+apache_ssl_port: 443
+
+apache_opts: []
+#  startservers: 8
+#  minspareservers: 5
+#  maxspareservers: 20
+#  maxclients: 256
+#  maxrequestsperchild: 4000
+#  serverlimit: 254
+
+
+vhosts: []
