@@ -84,7 +84,7 @@
 
 - name: Ensure default SSL configuration is safe
   tags: apache
-  template: src={{ apache_ssl_file + '.j2' }} dest={{ apache_conf_d_dir + '/' + apache_ssl_file }} seuser=system_u serol=object_r setype=httpd_config_t owner=root group=root mode=0644 backup=yes
+  template: src={{ apache_ssl_file + '.j2' }} dest={{ apache_conf_d_dir + '/' + apache_ssl_file }} seuser=system_u serole=object_r setype=httpd_config_t owner=root group=root mode=0644 backup=yes
   notify: reload apache
 
 - name: Ensure apache is running and autostart
