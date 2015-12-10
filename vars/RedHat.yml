@@ -10,3 +10,4 @@ apache_pkgs:
   - httpd
   - mod_ssl
 
+apache_ssl_file: "ssl.conf"

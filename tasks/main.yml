@@ -82,6 +82,10 @@
   file: path={{ apache_vhosts_conf_dir }} state=directory owner=root group=root mode=0750
   when: ansible_os_family == 'RedHat'
 
+- name: Ensure default SSL configuration is safe
+  tags: apache
+  template: src={{ apache_ssl_file + '.j2' }} dest={{ apache_conf_dir + '/' + apache_ssl_file }} seuser=system_u serol=object_r setype=httpd_config_t owner=root group=root mode=0644
+
 - name: Ensure apache is running and autostart
   tags: apache
   service: name={{ apache_service }} state=started enabled=yes
