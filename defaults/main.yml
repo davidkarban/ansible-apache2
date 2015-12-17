@@ -6,6 +6,11 @@ apache_ssl_ip: "{{ ansible_default_ipv4.address }}"
 apache_port: 80
 apache_ssl_port: 443
 
+# TLS settings
+apache2_tls_cert_file: "{{ apache2_default_tls_cert_file }}"
+apache2_tls_key_file: "{{ apache2_default_tls_key_file }}"
+apache2_tls_bundle_file: "{{ apache2_default_tls_bundle_file }}"
+
 # Strict Transport Security defaults
 # do not activate STS by default 
 apache2_sts: false
