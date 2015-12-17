@@ -50,7 +50,9 @@ SSLRandomSeed connect builtin
 SSLCryptoDevice builtin
 #SSLCryptoDevice ubsec
 
-Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains"
+{% if apache2_sts %}
+Header always set Strict-Transport-Security "max-age={{ apache2_sts_max_age }}; {% if apache2_sts_subdomains %}includeSubDomains{% endif %}"
+{% endif %}
 #Header always set X-Frame-Options DENY
 Header always set X-Frame-Options SAMEORIGIN
 Header always set X-Content-Type-Options nosniff
