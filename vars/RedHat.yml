@@ -17,3 +17,6 @@ apache2_default_tls_key_file: "/etc/pki/tls/private/localhost.key"
 apache2_default_tls_bundle_file: false
 
 __apache_default_document_root: "/var/www/html"
+
+# default log dir
+__apache_log_dir: "/var/log/httpd"
