@@ -28,7 +28,7 @@ apache_opts: []
 #  serverlimit: 254
 
 # Document root for apache default vhost
-apache_default_document_root: "{{ __apache_default_document_root: }}"
+apache_default_document_root: "{{ __apache_default_document_root }}"
 
 # Enable default vhost?
 apache_default_vhost_enabled: true
