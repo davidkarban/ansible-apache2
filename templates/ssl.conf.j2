@@ -68,7 +68,7 @@ SSLStaplingCache "shmcb:logs/stapling-cache(150000)"
 <VirtualHost _default_:443>
 
 # General setup for the virtual host, inherited from global configuration
-#DocumentRoot "/var/www/html"
+#DocumentRoot "{{ apache_default_document_root }}"
 #ServerName www.example.com:443
 
 # Use separate log files for the SSL virtual host; note that LogLevel

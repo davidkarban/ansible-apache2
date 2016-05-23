@@ -8,3 +8,4 @@ apache_group: "www-data"
 apache_pkgs:
   - apache2
 
+__apache_default_document_root: "/var/www/"

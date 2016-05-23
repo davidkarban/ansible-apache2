@@ -1,12 +1,12 @@
 <VirtualHost {{ apache_ip  }}:80>
 	ServerAdmin webmaster@{{ apache_admin_domain }}
 
-	DocumentRoot /var/www
+	DocumentRoot {{ apache_default_document_root }}
 	<Directory />
 		Options FollowSymLinks
 		AllowOverride None
 	</Directory>
-	<Directory /var/www/>
+	<Directory {{ apache_default_document_root }}>
 		Options Indexes FollowSymLinks MultiViews
 		AllowOverride None
 		Order allow,deny
