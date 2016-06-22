@@ -132,7 +132,7 @@ SSLCertificateKeyFile {{ apache2_tls_key_file }}
 #   Set the CA certificate verification path where to find CA
 #   certificates for client authentication or alternatively one
 #   huge file containing all of them (file must be PEM encoded)
-{% if apache2_tls_bundle_file %}SSLCACertificateFile {{ apache2_tls_bundle_file }} %}{% else %}#SSLCACertificateFile /etc/pki/tls/certs/ca-bundle.crt{% endif %}
+{% if apache2_tls_bundle_file %}SSLCACertificateFile {{ apache2_tls_bundle_file }}{% else %}#SSLCACertificateFile /etc/pki/tls/certs/ca-bundle.crt{% endif %}
 
 #   Client Authentication (Type):
 #   Client certificate verification type and depth.  Types are

@@ -1,5 +1,7 @@
 ---
 # defaults file for apache2
+apache_admin_domain: "{{ ansible_fqdn }}"
+
 apache_ip: "{{ ansible_default_ipv4.address }}"
 apache_ssl_ip: "{{ ansible_default_ipv4.address }}"
 

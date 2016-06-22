@@ -86,6 +86,7 @@
   template: 
     src: default.j2
     dest: "{{ apache_vhosts_conf_dir + '/000-default.conf' }}"
+    backup: true
   tags:
     - apache
     - vhosts
