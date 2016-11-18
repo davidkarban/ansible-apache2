@@ -46,14 +46,6 @@
     - conf.d/*
   notify: reload apache
 
-- name: Remove old security hardening
-  tags: apache
-  file: path={{ apache_conf_d_dir }}/{{ item }} state=absent
-  with_items:
-    - etag
-    - security
-  notify: reload apache
-
 - name: Load apache configuration
   tags: apache
   template: src=apache2.conf.{{ ansible_os_family }}-{{ apache_version.stdout }}.j2 dest={{ apache_conf_dir }}/{{ apache_config_file }} owner=root group=root mode=0644 backup=yes
@@ -68,7 +60,7 @@
 - name: Enable aditional apache modules if needed
   tags: apache
   command: /usr/sbin/a2enmod {{ item }} creates=/etc/apache2/mods-enabled/{{ item + '.load' }}
-  with_items: apache_modules
+  with_items: '{{ apache_modules }}'
   when: 
     - ansible_os_family == 'Debian'
     - apache_modules is defined
