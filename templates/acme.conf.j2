@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+# Acme.sh (Let's encrypt) folder for domain authorizations
+
+Alias /.well-known/acme-challenge/ {{ apache_default_document_root }}/acme/.well-known/acme-challenge/
+<Directory "{{ apache_default_document_root }}/acme/.well-known/acme-challenge/">
+    Options None
+    AllowOverride None
+    ForceType text/plain
+    RedirectMatch 404 "^(?!/\.well-known/acme-challenge/[\w-]{43}$)"
+</Directory>

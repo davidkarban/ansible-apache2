@@ -1,12 +1,13 @@
 <VirtualHost {{ apache_ip  }}:80>
+        ServerName {{ inventory_hostname }}
 	ServerAdmin webmaster@{{ apache_admin_domain }}
 
-	DocumentRoot /var/www
+	DocumentRoot {{ apache_default_document_root }}
 	<Directory />
 		Options FollowSymLinks
 		AllowOverride None
 	</Directory>
-	<Directory /var/www/>
+	<Directory {{ apache_default_document_root }}>
 		Options Indexes FollowSymLinks MultiViews
 		AllowOverride None
 		Order allow,deny
@@ -21,11 +22,17 @@
 		Allow from all
 	</Directory>
 
-	ErrorLog ${APACHE_LOG_DIR}/error.log
+{% if php_fpm|default(false) %}{% if ansible_distribution == "Debian" %}
+        FastCgiExternalServer {{ apache_default_document_root }}/index.php -host 127.0.0.1:9000
+{% else %}
+        ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9000{{ apache_default_document_root }}/$1 connectiontimeout=5 timeout=300
+{% endif %}{% endif %}
+
+#	ErrorLog {{ apache_log_dir }}/error.log
 
 	# Possible values include: debug, info, notice, warn, error, crit,
 	# alert, emerg.
-	LogLevel warn
+#	LogLevel warn
 
-	CustomLog ${APACHE_LOG_DIR}/access.log combined
+#	CustomLog {{ apache_log_dir }}/access.log combined
 </VirtualHost>

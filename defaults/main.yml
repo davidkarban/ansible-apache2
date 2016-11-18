@@ -1,5 +1,7 @@
 ---
 # defaults file for apache2
+apache_admin_domain: "{{ ansible_fqdn }}"
+
 apache_ip: "{{ ansible_default_ipv4.address }}"
 apache_ssl_ip: "{{ ansible_default_ipv4.address }}"
 
@@ -27,5 +29,13 @@ apache_opts: []
 #  maxrequestsperchild: 4000
 #  serverlimit: 254
 
+# Document root for apache default vhost
+apache_default_document_root: "{{ __apache_default_document_root }}"
+
+# Enable default vhost?
+apache_default_vhost_enabled: true
+
+# Default apache log directory.
+apache_log_dir: "{{ __apache_log_dir }}"
 
 vhosts: []

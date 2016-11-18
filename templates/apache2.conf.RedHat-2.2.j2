@@ -387,7 +387,7 @@ DocumentRoot "/var/www/html"
 # negotiated documents.  The MultiViews Option can be used for the 
 # same purpose, but it is much slower.
 #
-DirectoryIndex index.html index.html.var
+DirectoryIndex {% if php|default(false) or php_fpm|default(false) %}index.php {% endif %}index.html
 
 #
 # AccessFileName: The name of the file to look for in each directory

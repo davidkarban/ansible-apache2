@@ -82,11 +82,35 @@
   file: path={{ apache_vhosts_conf_dir }} state=directory owner=root group=root mode=0750
   when: ansible_os_family == 'RedHat'
 
+- name: Ensure default vhost is available
+  template: 
+    src: default.j2
+    dest: "{{ apache_vhosts_conf_dir + '/000-default.conf' }}"
+    backup: true
+  tags:
+    - apache
+    - vhosts
+  when: "{{ apache_default_vhost_enabled }}"
+
 - name: Ensure default SSL configuration is safe
   tags: apache
   template: src={{ apache_ssl_file + '.j2' }} dest={{ apache_conf_d_dir + '/' + apache_ssl_file }} seuser=system_u serole=object_r setype=httpd_config_t owner=root group=root mode=0644 backup=yes
   notify: reload apache
   when: ansible_os_family == "RedHat"
+
+- name: Upload acme alias if acme enabled
+  tags: apache
+  template:
+    src: acme.conf.j2
+    dest: "{{ apache_conf_d_dir + '/acme.conf' }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+    seuser: "system_u"
+    serole: "object_r"
+    setype: "httpd_config_t"
+    backup: yes
+  notify: reload apache
 
 - name: Ensure apache is running and autostart
   tags: apache
