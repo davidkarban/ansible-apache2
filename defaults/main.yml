@@ -21,6 +21,11 @@ apache2_sts_max_age: "63072000"
 #  by default do not include subdomains
 apache2_sts_subdomains: false
 
+apache_modules: 
+  - 'headers'
+  - 'proxy'
+  - 'proxy_fcgi'
+
 apache_opts: []
 #  startservers: 8
 #  minspareservers: 5
