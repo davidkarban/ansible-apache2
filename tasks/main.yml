@@ -27,12 +27,12 @@
     - apache
     - php
     - vhosts
-  always_run: true
+  check_mode: false
   changed_when: false
   shell: '{{ apache_service | quote }} -v | grep version | sed -e "s/Server version.\{1\} Apache\/\([0-9]\)\.\([0-9]\)\.\([0-9]\{1,3\}\).*/\1.\2/g"'
   register: apache_version
 
-- name: Load aditional variables
+- name: Load additional variables
   tags: 
     - apache
     - php
@@ -56,6 +56,12 @@
   template: src=ports.conf.j2 dest={{ apache_conf_dir }}/ports.conf owner=root group=root mode=0644
   notify: restart apache
   when: ansible_os_family == 'Debian'
+
+- name: Ensure proper mpm is activated (apache 2.4)
+  template:
+    src: '00-mpm.conf.j2'
+    dest: '{{ apache_modules_dir }}/00-mpm.conf'
+  when: apache_version.stdout == '2.4'
 
 - name: Enable aditional apache modules if needed
   tags: apache
