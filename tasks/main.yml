@@ -61,7 +61,9 @@
   template:
     src: '00-mpm.conf.j2'
     dest: '{{ apache_modules_dir }}/00-mpm.conf'
-  when: apache_version.stdout == '2.4'
+  when:
+    - apache_version.stdout == '2.4'
+    - ansible_os_family == 'RedHat'
   notify: restart apache
 
 - name: Enable aditional apache modules if needed
