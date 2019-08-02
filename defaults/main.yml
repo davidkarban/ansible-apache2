@@ -43,4 +43,8 @@ apache_default_vhost_enabled: true
 # Default apache log directory.
 apache_log_dir: "{{ __apache_log_dir }}"
 
+# X-Frame_Options header setting
+# DENY, SAMEORIGIN? or false (commented out)
+apache2_header_x_frame_options_value: "SAMEORIGIN"
+
 vhosts: []

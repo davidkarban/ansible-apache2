@@ -54,7 +54,8 @@ SSLCryptoDevice builtin
 Header always set Strict-Transport-Security "max-age={{ apache2_sts_max_age }}; {% if apache2_sts_subdomains %}includeSubDomains{% endif %}"
 {% endif %}
 #Header always set X-Frame-Options DENY
-Header always set X-Frame-Options SAMEORIGIN
+{% if apache2_header_x_frame_options_value %}Header always set X-Frame-Options {{ apache2_header_x_frame_options_value }}
+{% endif %}
 Header always set X-Content-Type-Options nosniff
 
 SSLCompression off 
