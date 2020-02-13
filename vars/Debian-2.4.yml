@@ -1,4 +1,4 @@
-apache_conf_d_dir: "/etc/apache2/conf-availabled"
+apache_conf_d_dir: "/etc/apache2/conf-available"
 apache_modules_dir: "/etc/apache2/mods-available"
 apache_vhosts_conf_dir: "/etc/apache2/sites-available"
 
