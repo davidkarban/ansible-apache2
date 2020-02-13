@@ -14,6 +14,13 @@
   shell: '{{ apache_service | quote }} -v | grep version | sed -e "s/Server version.\{1\} Apache\/\([0-9]\)\.\([0-9]\)\.\([0-9]\{1,3\}\).*/\1.\2/g"'
   register: apache_version
 
+- name: Get apache subversion
+  check_mode: false
+  changed_when: false
+  shell: '{{ apache_service | quote }} -v | grep version | sed -e "s/Server version.\{1\} Apache\/\([0-9]\)\.\([0-9]\)\.\([0-9]\{1,3\}\).*/\3/g"'
+  register: apache_subversion
+
+
 - name: Load additional variables
   include_vars: "{{ ansible_os_family }}-{{ apache_version.stdout }}.yml"
 
@@ -34,6 +41,15 @@
   when: 
     - ansible_os_family == 'Debian'
   notify: reload apache
+
+- name: Ensure http/2 module is loaded on new enough apache version on Debian family
+  apache2_module: 
+    name: http2
+    state: present
+  when: 
+    - ansible_os_family == 'Debian'
+    - apache_version.stdout == '2.4'
+    - apache_subversion.stdout|int >= 17
 
 - name: Load apache configuration
   template: src=apache2.conf.{{ ansible_os_family }}-{{ apache_version.stdout }}.j2 dest={{ apache_conf_dir }}/{{ apache_config_file }} owner=root group=root mode=0644 backup=yes
