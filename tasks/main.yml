@@ -60,6 +60,31 @@
   notify: restart apache
   when: ansible_os_family == 'Debian'
 
+- name: Ensure all not used MPMs are disabled (Debian)
+  apache2_module:
+    name: "mpm_{{ item }}"
+    state: absent
+  loop:
+    - "worker"
+    - "prefork"
+    - "event"
+  when: 
+    - "apache2_mpm != item"
+    - ansible_os_family == "Debian"
+  # Apache fails when no mpm is present, but it also fails when we want to have second one
+  # So ignored here, next task set up mpm
+  failed_when: false
+  notify: reload apache
+
+- name: Ensure proper mpm is active
+  apache2_module: 
+    name: "mpm_{{ apache2_mpm }}"
+    state: present
+  when: 
+    - ansible_os_family == "Debian"
+  notify: reload apache
+
+
 - name: Ensure proper mpm is activated (apache 2.4)
   template:
     src: '00-mpm.conf.j2'
