@@ -1,14 +1,8 @@
 ---
 # handlers file for apache2
 - name: reload apache
-  tags: 
-    - apache 
-    - php
   service: name={{ apache_service }} state=reloaded
 
 - name: restart apache
-  tags: 
-    - apache
-    - php
   service: name={{ apache_service }} state=restarted
 
