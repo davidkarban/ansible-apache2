@@ -37,6 +37,15 @@
     - conf.d/*
   notify: reload apache
 
+- name: Enable loaded security configuration on Debian family
+  tags: apache
+  command: /usr/sbin/a2enconf {{ item }} creates=/etc/apache2/mods-enabled/{{ item + '.load' }}
+  with_fileglob: 
+    - conf.d/*
+  when: 
+    - ansible_os_family == 'Debian'
+  notify: reload apache
+
 - name: Load apache configuration
   tags: apache
   template: src=apache2.conf.{{ ansible_os_family }}-{{ apache_version.stdout }}.j2 dest={{ apache_conf_dir }}/{{ apache_config_file }} owner=root group=root mode=0644 backup=yes
