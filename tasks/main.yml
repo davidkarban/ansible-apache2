@@ -20,7 +20,6 @@
   shell: '{{ apache_service | quote }} -v | grep version | sed -e "s/Server version.\{1\} Apache\/\([0-9]\)\.\([0-9]\)\.\([0-9]\{1,3\}\).*/\3/g"'
   register: apache_subversion
 
-
 - name: Load additional variables
   include_vars: "{{ ansible_os_family }}-{{ apache_version.stdout }}.yml"
 
@@ -42,6 +41,15 @@
     - ansible_os_family == 'Debian'
   notify: reload apache
 
+- name: Enable aditional apache modules if needed
+  apache2_module:
+    name: "{{ item }}"
+  loop: '{{ apache_modules }}'
+  when: 
+    - ansible_os_family == 'Debian'
+    - apache_modules is defined
+  notify: reload apache
+
 - name: Ensure http/2 module is loaded on new enough apache version on Debian family
   apache2_module: 
     name: http2
@@ -50,6 +58,7 @@
     - ansible_os_family == 'Debian'
     - apache_version.stdout == '2.4'
     - apache_subversion.stdout|int >= 17
+  notify: reload apache
 
 - name: Load apache configuration
   template: src=apache2.conf.{{ ansible_os_family }}-{{ apache_version.stdout }}.j2 dest={{ apache_conf_dir }}/{{ apache_config_file }} owner=root group=root mode=0644 backup=yes
@@ -94,14 +103,6 @@
     - ansible_os_family == 'RedHat'
   notify: restart apache
 
-- name: Enable aditional apache modules if needed
-  command: /usr/sbin/a2enmod {{ item }} creates=/etc/apache2/mods-enabled/{{ item + '.load' }}
-  with_items: '{{ apache_modules }}'
-  when: 
-    - ansible_os_family == 'Debian'
-    - apache_modules is defined
-  notify: reload apache
-
 - name: Ensure vhosts.d directory is defined (RedHat)
   file: path={{ apache_vhosts_conf_dir }} state=directory owner=root group=root mode=0750
   when: ansible_os_family == 'RedHat'
@@ -111,9 +112,6 @@
     src: default.j2
     dest: "{{ apache_vhosts_conf_dir + '/000-default.conf' }}"
     backup: true
-  tags:
-    - apache
-    - vhosts
   when: apache_default_vhost_enabled
 
 - name: Ensure default SSL configuration is safe
