@@ -1,3 +1,4 @@
+{% if apache_default_vhost_enabled %}
 <VirtualHost {{ apache_ip  }}:80>
 	ServerAdmin webmaster@{{ apache_admin_domain }}
 
@@ -35,3 +36,5 @@
 
 #	CustomLog {{ apache_log_dir }}/access.log combined
 </VirtualHost>
+{% endif %}
+
