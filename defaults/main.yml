@@ -27,6 +27,8 @@ apache_modules:
   - 'proxy_fcgi'
   - 'ssl'
 
+apache2_mpm: "event"
+
 apache_opts: []
 #  startservers: 8
 #  minspareservers: 5
