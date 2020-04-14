@@ -25,6 +25,7 @@ apache_modules:
   - 'headers'
   - 'proxy'
   - 'proxy_fcgi'
+  - 'ssl'
 
 apache_opts: []
 #  startservers: 8
