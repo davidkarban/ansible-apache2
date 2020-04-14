@@ -23,6 +23,15 @@
 - name: Load additional variables
   include_vars: "{{ ansible_os_family }}-{{ apache_version.stdout }}.yml"
 
+- name: Enable aditional apache modules
+  apache2_module:
+    name: "{{ item }}"
+  loop: '{{ apache_modules }}'
+  when: 
+    - ansible_os_family == 'Debian'
+    - apache_modules is defined
+  notify: reload apache
+
 - name: Load security hardening for apache
   copy: src=conf.d/{{ item }} dest={{ apache_conf_d_dir }} owner=root group=root mode=0644 backup=yes
   loop: 
@@ -39,15 +48,6 @@
     - "security.conf"
   when: 
     - ansible_os_family == 'Debian'
-  notify: reload apache
-
-- name: Enable aditional apache modules if needed
-  apache2_module:
-    name: "{{ item }}"
-  loop: '{{ apache_modules }}'
-  when: 
-    - ansible_os_family == 'Debian'
-    - apache_modules is defined
   notify: reload apache
 
 - name: Ensure http/2 module is loaded on new enough apache version on Debian family
