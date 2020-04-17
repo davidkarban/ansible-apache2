@@ -114,6 +114,12 @@
     backup: true
   when: apache_default_vhost_enabled
 
+- name: Ensure default vhost is not available
+  file:     
+    path: "{{ apache_vhosts_conf_dir + '/000-default.conf' }}"
+    state: absent
+  when: not apache_default_vhost_enabled
+
 - name: Ensure default SSL configuration is safe
   template: 
     src: "{{ apache_ssl_file + '.' + ansible_os_family + '.j2' }}"

@@ -5,7 +5,9 @@ apache_admin_domain: "{{ ansible_fqdn }}"
 apache_ip: "{{ ansible_default_ipv4.address }}"
 apache_ssl_ip: "{{ ansible_default_ipv4.address }}"
 
+# set to null to disable unencrypted traffic
 apache_port: 80
+
 apache_ssl_port: 443
 
 # TLS settings
