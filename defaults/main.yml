@@ -45,6 +45,9 @@ apache_default_document_root: "{{ __apache_default_document_root }}"
 # Enable default vhost?
 apache_default_vhost_enabled: true
 
+# Enable defult SSL vhost?
+apache_default_ssl_vhost_enabled: true
+
 # Default apache log directory.
 apache_log_dir: "{{ __apache_log_dir }}"
 
