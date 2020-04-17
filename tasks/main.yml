@@ -123,7 +123,7 @@
 - name: Ensure default ssl vhost is available on Debian family
   command: 
     cmd: a2ensite default-ssl
-    creates: "{{ apache_vhosts_conf_dir + '/000-default.conf' }}"
+    creates: "{{ apache_vhosts_conf_dir + '/../sites-enabled/default-ssl.conf' }}"
   when: apache_default_ssl_vhost_enabled
 
 - name: Ensure default SSL configuration is safe
