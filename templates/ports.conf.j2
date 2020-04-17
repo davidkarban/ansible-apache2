@@ -5,8 +5,7 @@
 # Debian etch). See /usr/share/doc/apache2.2-common/NEWS.Debian.gz and
 # README.Debian.gz
 
-{% if apache_port != null %}
-{% if apache_version.stdout == "2.2" %}NameVirtualHost {{ apache_ip }}:{{ apache_port }}
+{% if apache_port != None %}{% if apache_version.stdout == "2.2" %}NameVirtualHost {{ apache_ip }}:{{ apache_port }}
 {% endif %}
 Listen {{ apache_ip }}:{{ apache_port }}
 {% endif %}
