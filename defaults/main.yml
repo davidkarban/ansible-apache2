@@ -28,6 +28,7 @@ apache_modules:
   - 'proxy'
   - 'proxy_fcgi'
   - 'ssl'
+  - 'vhost_alias'
 
 apache2_mpm: "event"
 
