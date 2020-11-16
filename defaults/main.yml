@@ -29,6 +29,7 @@ apache_modules:
   - 'proxy_fcgi'
   - 'ssl'
   - 'vhost_alias'
+  - 'rewrite'
 
 apache2_mpm: "event"
 
